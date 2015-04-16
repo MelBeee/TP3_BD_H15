@@ -49,9 +49,35 @@ alter table Emprunt add constraint NumAdherent_FK foreign key ( NumAdherent ) re
 alter table Emprunt add constraint Emprunt_PK primary key ( NumExemplaire, NumAdherent );
 
 
+insert into genre values('inf', 'Informatique');
+insert into genre values('sci','Sciences');
+insert into genre values('div','Divertissement');
+insert into genre values('drc','Droit commercial');
+insert into genre values('his','Histoire');
+insert into genre values('lit','Littérature');
 
+alter session set nls_date_format = 'DD-MM-YYYY';
 
+insert into livre values(1,   'inf', 'Réseaux Informatiques', 'Francois Pignet', '01-12-2007', 'Expert IT');
+insert into livre values(2,   'inf', 'Au coeur de Java 2',    'Gary Cornell',    '01-12-2004', 'CampusPress');
+insert into livre values(3,   'inf', 'SQL pour les noobs',    'John R.Levine',   '01-11-1993', 'PourLesNuls');
+insert into livre values(4,   'sci', '', '', '', '', '');
+insert into livre values(5,   'sci', '', '', '', '', '');
+insert into livre values(6,   'sci', '', '', '', '', '');
+insert into livre values(7,   'div', '', '', '', '', '');
+insert into livre values(8,   'div', '', '', '', '', '');
+insert into livre values(9,   'div', '', '', '', '', '');
+insert into livre values(10,  'drc', '', '', '', '', '');
+insert into livre values(11,  'drc', '', '', '', '', '');
+insert into livre values(12,  'drc', '', '', '', '', '');
+insert into livre values(13,  'his', '', '', '', '', '');
+insert into livre values(14,  'his', '', '', '', '', '');
+insert into livre values(15,  'his', '', '', '', '', '');
+insert into livre values(16,  'lit', '', '', '', '', '');
+insert into livre values(17,  'lit', '', '', '', '', '');
+insert into livre values(18,  'lit', '', '', '', '', '');
 
+commit;
 
 
 
