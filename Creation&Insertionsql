@@ -1,0 +1,59 @@
+drop table Emprunt;
+drop table Exemplaire;
+drop table Adherent;
+drop table Livre;
+drop table Genre;
+
+create table Genre
+(
+  CodeGenre varchar(3) primary key,
+  Genre varchar(20) not null
+);
+
+create table Livre
+(
+  NumLivre number primary key,
+  CodeGenre varchar(3),
+  Titre varchar(50),
+  Auteur varchar (50),
+  DateParution date,
+  MaisonEdition varchar(50)
+);
+alter table Livre add constraint CodeGenre_FK foreign key ( CodeGenre ) references Genre ( CodeGenre ) ;
+
+create table Adherent
+(
+  NumAdherent number primary key,
+  Nom varchar(30),
+  Prenom varchar(30),
+  Adresse varchar(50),
+  Telephone varchar(14)
+);
+
+create table Exemplaire
+(
+  NumExemplaire number primary key,
+  NumLivre number
+);
+alter table Exemplaire add constraint NumLivre_FK foreign key ( NumLivre ) references Livre ( NumLivre );
+
+create table Emprunt
+(
+  NumExemplaire number,
+  NumAdherent number,
+  DatePret date,
+  DateRetour date
+);
+alter table Emprunt add constraint NumExemplaire_FK foreign key ( NumExemplaire ) references Exemplaire ( NumExemplaire );
+alter table Emprunt add constraint NumAdherent_FK foreign key ( NumAdherent ) references Adherent ( NumAdherent ); 
+alter table Emprunt add constraint Emprunt_PK primary key ( NumExemplaire, NumAdherent );
+
+
+
+
+
+
+
+
+
+
