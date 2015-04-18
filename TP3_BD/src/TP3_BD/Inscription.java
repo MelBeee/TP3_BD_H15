@@ -59,9 +59,6 @@ public class Inscription {
             int n = InsertStm.executeUpdate(SqlIns);
 
             System.out.println("nb de lignes ajoutée" + n);
-
-
-
         }catch(SQLException sqlInsertEx)
         {
 
