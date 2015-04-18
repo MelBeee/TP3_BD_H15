@@ -58,24 +58,24 @@ insert into genre values('lit','Littérature');
 
 alter session set nls_date_format = 'DD-MM-YYYY';
 
-insert into livre values(1,   'inf', 'Réseaux Informatiques', 'Francois Pignet', '01-12-2007', 'Expert IT');
-insert into livre values(2,   'inf', 'Au coeur de Java 2',    'Gary Cornell',    '01-12-2004', 'CampusPress');
-insert into livre values(3,   'inf', 'SQL pour les noobs',    'John R.Levine',   '01-11-1993', 'PourLesNuls');
-insert into livre values(4,   'sci', '', '', '', '', '');
-insert into livre values(5,   'sci', '', '', '', '', '');
-insert into livre values(6,   'sci', '', '', '', '', '');
-insert into livre values(7,   'div', '', '', '', '', '');
-insert into livre values(8,   'div', '', '', '', '', '');
-insert into livre values(9,   'div', '', '', '', '', '');
-insert into livre values(10,  'drc', '', '', '', '', '');
-insert into livre values(11,  'drc', '', '', '', '', '');
-insert into livre values(12,  'drc', '', '', '', '', '');
-insert into livre values(13,  'his', '', '', '', '', '');
-insert into livre values(14,  'his', '', '', '', '', '');
-insert into livre values(15,  'his', '', '', '', '', '');
-insert into livre values(16,  'lit', '', '', '', '', '');
-insert into livre values(17,  'lit', '', '', '', '', '');
-insert into livre values(18,  'lit', '', '', '', '', '');
+Insert into LIVRE values ('1','inf','Réseaux Informatiques','Francois Pignet',to_date('07-12-01','RR-MM-DD'),'Expert IT');
+Insert into LIVRE values ('2','inf','Au coeur de Java 2','Gary Cornell',to_date('04-12-01','RR-MM-DD'),'CampusPress');
+Insert into LIVRE values ('3','inf','SQL pour les noobs','John R.Levine',to_date('93-11-01','RR-MM-DD'),'PourLesNuls');
+Insert into LIVRE values ('4','sci','Atome crochu','Charlie Laplante',to_date('15-04-16','RR-MM-DD'),'LionelGroulx');
+Insert into LIVRE values ('5','sci','Martine au laboratoire','Melissa Boucher',to_date('15-04-16','RR-MM-DD'),'LionelGroulx');
+Insert into LIVRE values ('6','sci','Le gêne égoiste','Frederik Paquette',to_date('15-04-16','RR-MM-DD'),'LionelGroulx');
+Insert into LIVRE values ('7','div','Un beau spectacle','Emmanuel Beloin',to_date('12-02-12','RR-MM-DD'),'LionelGroulx');
+Insert into LIVRE values ('8','div','Penny Wise','Stephan King',to_date('01-05-24','RR-MM-DD'),'LionelGroulx');
+Insert into LIVRE values ('9','div','Amos Daragon','Bryan Perreault',to_date('03-02-20','RR-MM-DD'),'LionelGroulx');
+Insert into LIVRE values ('10','drc','Couillard vs the World','Philippe Couillard',to_date('15-03-21','RR-MM-DD'),'PhilCouillard');
+Insert into LIVRE values ('11','drc','SI avec Pelletier','Maude Pelletier',to_date('14-06-12','RR-MM-DD'),'LionelGroulx');
+Insert into LIVRE values ('12','drc','Le bricolage cest bien','Maude Pelletier',to_date('02-07-23','RR-MM-DD'),'LionelGroulx');
+Insert into LIVRE values ('13','his','Assassins Creed','Oliver Bowden',to_date('01-04-01','RR-MM-DD'),'EcriturePlus');
+Insert into LIVRE values ('14','his','Amos Daragon','Bryan Perreault',to_date('97-04-01','RR-MM-DD'),'LionelGroulx');
+Insert into LIVRE values ('15','his','Leonis','Bryan Perreault',to_date('01-04-01','RR-MM-DD'),'LecturePlus');
+Insert into LIVRE values ('16','lit','La fin des dieux','Bryan Perreault',to_date('99-02-01','RR-MM-DD'),'LecturePlus');
+Insert into LIVRE values ('17','lit','Chevalier demeraude','Anne Robillard',to_date('12-04-01','RR-MM-DD'),'LecturePlus');
+Insert into LIVRE values ('18','lit','Forteresse Digitale','Dan Brown',to_date('93-03-01','RR-MM-DD'),'LecturePlus');
 
 commit;
 
