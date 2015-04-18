@@ -23,7 +23,7 @@ alter table Livre add constraint CodeGenre_FK foreign key ( CodeGenre ) referenc
 
 create table Adherent
 (
-  NumAdherent number primary key,
+  NumAdherent number primary key null,
   Nom varchar(30),
   Prenom varchar(30),
   Adresse varchar(50),
@@ -41,9 +41,10 @@ create table Emprunt
 (
   NumExemplaire number,
   NumAdherent number,
-  DatePret date,
+  DateEmprunt date,
   DateRetour date
 );
+
 alter table Emprunt add constraint NumExemplaire_FK foreign key ( NumExemplaire ) references Exemplaire ( NumExemplaire );
 alter table Emprunt add constraint NumAdherent_FK foreign key ( NumAdherent ) references Adherent ( NumAdherent ); 
 alter table Emprunt add constraint Emprunt_PK primary key ( NumExemplaire, NumAdherent );
@@ -77,9 +78,5 @@ Insert into LIVRE values ('17','lit','Chevalier demeraude','Anne Robillard',to_d
 Insert into LIVRE values ('18','lit','Forteresse Digitale','Dan Brown',to_date('93-03-01','RR-MM-DD'),'LecturePlus');
 
 commit;
-
-CREATE SEQUENCE SQNumAdherent
-INCREMENT BY 1
-START WITH 10;
 
 
