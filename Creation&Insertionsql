@@ -48,7 +48,6 @@ alter table Emprunt add constraint NumExemplaire_FK foreign key ( NumExemplaire 
 alter table Emprunt add constraint NumAdherent_FK foreign key ( NumAdherent ) references Adherent ( NumAdherent ); 
 alter table Emprunt add constraint Emprunt_PK primary key ( NumExemplaire, NumAdherent );
 
-
 insert into genre values('inf', 'Informatique');
 insert into genre values('sci','Sciences');
 insert into genre values('div','Divertissement');
@@ -79,7 +78,8 @@ Insert into LIVRE values ('18','lit','Forteresse Digitale','Dan Brown',to_date('
 
 commit;
 
-
-
+CREATE SEQUENCE SQNumAdherent
+INCREMENT BY 1
+START WITH 10;
 
 
