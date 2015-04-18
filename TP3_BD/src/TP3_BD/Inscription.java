@@ -28,15 +28,11 @@ public class Inscription {
     String sqlSel = "Select * from Adherent";
     Statement SelectStm = null;
     ResultSet Resultset = null;
+    String User ="BoucherM";
+    String Password ="ORACLE2";
+    String url = "jdbc:oracle:thin:@205.237.244.251:1521:orcl";
 
     public Inscription() {
-
-        String User ="BoucherM";
-        String Password ="ORACLE2";
-        String url = "jdbc:oracle:thin:@205.237.244.251:1521:orcl";
-
-
-
         try
         {
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
@@ -104,6 +100,7 @@ public class Inscription {
             }
         });
     }
+
 
     private void EffacerPersonne()
     {
@@ -204,8 +201,6 @@ public class Inscription {
         {
             System.out.println(sqlInsertEx.getSQLState());
         }
-
-
     }
 
 
