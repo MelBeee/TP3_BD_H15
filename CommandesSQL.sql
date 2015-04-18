@@ -1,4 +1,4 @@
--- #1 Ajouter/Modifier/Supprimer Adherent 
+  -- #1 Ajouter/Modifier/Supprimer Adherent 
 
 insert into adherent (nom,prenom,adresse,telephone) values ('','','','');
 
@@ -8,8 +8,8 @@ delete from adherent where numadherent = 0;
 
 -- #2 Consulter la liste des livres par genre. 
 
-select * from livre 
-inner join genre g on g.CODEGENRE = livre.CODEGENRE
+select l.numlivre, l.titre, l.auteur, l.dateparution, l.maisonedition, genre from livre l
+inner join genre on genre.codegenre = l.codegenre
 where g.GENRE = '';
 
 -- #3 Ajouter un pret
@@ -27,9 +27,13 @@ inner join genre g on g.CODEGENRE = l.CODEGENRE;
 
 -- #5 Recherche d'un livre par auteur ou par titre
 
-select * from livre where AUTEUR = 'Melissa Boucher';
+select l.numlivre, l.titre, l.auteur, l.dateparution, l.maisonedition, genre from livre l
+inner join genre on genre.codegenre = l.codegenre
+where AUTEUR = '';
 
-select * from livre where titre like 'Martine au laboratoire%';
+select l.numlivre, l.titre, l.auteur, l.dateparution, l.maisonedition, genre from livre l
+inner join genre on genre.codegenre = l.codegenre
+where titre like '%';
 
 
 -- #6 
