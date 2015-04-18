@@ -77,6 +77,43 @@ Insert into LIVRE values ('16','lit','La fin des dieux','Bryan Perreault',to_dat
 Insert into LIVRE values ('17','lit','Chevalier demeraude','Anne Robillard',to_date('12-04-01','RR-MM-DD'),'LecturePlus');
 Insert into LIVRE values ('18','lit','Forteresse Digitale','Dan Brown',to_date('93-03-01','RR-MM-DD'),'LecturePlus');
 
+insert into exemplaire values ('1','1');
+insert into exemplaire values ('2','1');
+insert into exemplaire values ('3','2');
+insert into exemplaire values ('4','2');
+insert into exemplaire values ('5','3');
+insert into exemplaire values ('6','4');
+insert into exemplaire values ('7','5');
+insert into exemplaire values ('8','5');
+insert into exemplaire values ('9','6');
+insert into exemplaire values ('10','6');
+insert into exemplaire values ('11','7');
+insert into exemplaire values ('12','7');
+insert into exemplaire values ('13','8');
+insert into exemplaire values ('14','8');
+insert into exemplaire values ('15','9');
+insert into exemplaire values ('16','9');
+insert into exemplaire values ('17','10');
+insert into exemplaire values ('18','10');
+insert into exemplaire values ('19','11');
+insert into exemplaire values ('20','11');
+insert into exemplaire values ('21','12');
+insert into exemplaire values ('22','12');
+insert into exemplaire values ('23','13');
+insert into exemplaire values ('24','13');
+insert into exemplaire values ('25','14');
+insert into exemplaire values ('26','14');
+insert into exemplaire values ('27','15');
+insert into exemplaire values ('28','15');
+insert into exemplaire values ('29','16');
+insert into exemplaire values ('30','16');
+insert into exemplaire values ('31','17');
+insert into exemplaire values ('32','17');
+insert into exemplaire values ('33','18');
+insert into exemplaire values ('34','18');
+
 commit;
+
+
 
 
