@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.*;
+
+import com.sun.deploy.panel.DeleteFilesDialog;
 import oracle.jdbc.OracleDriver;
 import javax.swing.*;
 
@@ -21,7 +23,11 @@ public class Inscription {
     private JButton precedentButton;
     private JButton suivantButton;
     private JPanel RootInscription;
-
+    private JButton effacerButton;
+    int NumAdherentSelect =0;
+    String sqlSel = "Select * from Adherent";
+    Statement SelectStm = null;
+    ResultSet Resultset = null;
 
     public Inscription() {
 
@@ -29,26 +35,158 @@ public class Inscription {
         String Password ="ORACLE2";
         String url = "jdbc:oracle:thin:@205.237.244.251:1521:orcl";
 
+
+
         try
         {
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             final Connection conn = DriverManager.getConnection(url,User,Password);
-
+            SelectStm =  conn.createStatement(Resultset.TYPE_SCROLL_INSENSITIVE, Resultset.CONCUR_READ_ONLY);
+            Resultset = SelectStm.executeQuery(sqlSel);
+            SuivantPersonne(conn);
 
             ajouterButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                AjouterPersonne(conn);
-            }
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    AjouterPersonne(conn);
+                    ajouterButton.setEnabled(false);
+                    modifierButton.setEnabled(true);
+                    supprimerButton.setEnabled(true);
+                    suivantButton.setEnabled(true);
+                    precedentButton.setEnabled(true);
+                    effacerButton.setEnabled(true);
+                    SuivantPersonne(conn);
 
-        });
+                }
+            });
 
+            modifierButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ModifierPersonne(conn);
+                }
+            });
+
+            supprimerButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    SupprimerPersonne(conn);
+                }
+            });
+            suivantButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    SuivantPersonne(conn);
+                }
+            });
+
+            precedentButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    PrecedentPersonne(conn);
+                }
+            });
         }catch(SQLException connEX)
         {
             System.out.println("Connexion Impossible");
         }
 
+        effacerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EffacerPersonne();
+                ajouterButton.setEnabled(true);
+                modifierButton.setEnabled(false);
+                supprimerButton.setEnabled(false);
+                suivantButton.setEnabled(false);
+                precedentButton.setEnabled(false);
+                effacerButton.setEnabled(false);
+            }
+        });
     }
+
+    private void EffacerPersonne()
+    {
+        TB_Adresse.setText("");
+        TB_Nom.setText("");
+        TB_Prenom.setText("");
+        TB_Telephone.setText("");
+    }
+    private void SuivantPersonne(Connection conn)
+    {
+        try
+        {
+           if(Resultset.next())
+           {
+               NumAdherentSelect = Resultset.getInt("NumAdherent");
+               TB_Nom.setText(Resultset.getString("Nom"));
+               TB_Prenom.setText(Resultset.getString("Prenom"));
+               TB_Adresse.setText(Resultset.getString("Adresse"));
+               TB_Telephone.setText(Resultset.getString("Telephone"));
+           }
+        }catch(SQLException sqlSuivantEx){
+            System.out.println(sqlSuivantEx.getSQLState());
+
+        }
+
+    }
+
+    private void PrecedentPersonne(Connection conn)
+    {
+        try
+        {
+            if(Resultset.previous())
+            {
+                NumAdherentSelect = Resultset.getInt("NumAdherent");
+                TB_Nom.setText(Resultset.getString("Nom"));
+                TB_Prenom.setText(Resultset.getString("Prenom"));
+                TB_Adresse.setText(Resultset.getString("Adresse"));
+                TB_Telephone.setText(Resultset.getString("Telephone"));
+            }
+        }catch(SQLException sqlSuivantEx){
+            System.out.println(sqlSuivantEx.getSQLState());
+
+        }
+    }
+   private void SupprimerPersonne(Connection conn)
+   {
+       try {
+      String SqlDel = "Delete from Adherent where NumAdherent ="+NumAdherentSelect;
+      Statement DeleteStm = conn.createStatement();
+           int n = DeleteStm.executeUpdate(SqlDel);
+       conn.commit();
+       EffacerPersonne();
+       System.out.println("nb de lignes supprimer  " + n);
+       Resultset = SelectStm.executeQuery(sqlSel);
+       SuivantPersonne(conn);
+       }catch(SQLException sqlUpdateEx){
+           System.out.println(sqlUpdateEx.getSQLState());
+
+       }
+
+   }
+
+
+
+    private void ModifierPersonne(Connection conn)
+   {
+       try
+       {
+           String SqlUpd = "Update Adherent set Nom ='"+TB_Nom.getText()+"', Prenom = '"+TB_Prenom.getText()+"', Adresse ='"+TB_Adresse.getText()+"', Telephone ='"+TB_Telephone.getText()+"' where NumAdherent ="+NumAdherentSelect;
+           Statement UpdateStm = conn.createStatement();
+           int n = UpdateStm.executeUpdate(SqlUpd);
+           conn.commit();
+           EffacerPersonne();
+           System.out.println("nb de lignes modifier " + n);
+           Resultset = SelectStm.executeQuery(sqlSel);
+           SuivantPersonne(conn);
+       }catch(SQLException sqlUpdateEx){
+           System.out.println(sqlUpdateEx.getSQLState());
+
+       }
+   }
+
+
 
     private void AjouterPersonne(Connection conn)
     {
@@ -57,11 +195,14 @@ public class Inscription {
             String SqlIns = "insert into adherent values('"+TB_Nom.getText()+"','"+TB_Prenom.getText()+"','"+TB_Adresse.getText()+"','"+TB_Telephone.getText()+"')";
             Statement InsertStm = conn.createStatement();
             int n = InsertStm.executeUpdate(SqlIns);
-
-            System.out.println("nb de lignes ajoutée" + n);
+            conn.commit();
+            EffacerPersonne();
+            System.out.println("nb de lignes ajoute " + n);
+            Resultset = SelectStm.executeQuery(sqlSel);
+            SuivantPersonne(conn);
         }catch(SQLException sqlInsertEx)
         {
-
+            System.out.println(sqlInsertEx.getSQLState());
         }
 
 
