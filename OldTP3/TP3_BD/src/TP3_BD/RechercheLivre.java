@@ -7,12 +7,13 @@ import oracle.jdbc.OracleDriver;
 import java.sql.*;
 
 /**
- * Created by Mï¿½lissa on 2015-04-18.
+ * Created by Mélissa on 2015-04-18.
  */
 public class RechercheLivre {
     private JTextField TB_Auteur;
     private JTextField TB_Titre;
     private JComboBox CB_Genre;
+    private JButton BTN_RechercheGenre;
     private JButton BTN_RechercheAuteur;
     private JButton BTN_RechercheTitre;
     private JButton BTN_Previous;
@@ -24,7 +25,7 @@ public class RechercheLivre {
     private JLabel LB_Edition;
     private JLabel LB_Genre;
     private JLabel LB_Numero;
-    String sqlSel = "select livre.numlivre, livre.titre, livre.auteur, livre.dateparution, livre.maisonedition, genre from livre inner join genre on genre.codegenre = livre.codegenre";
+    String sqlSel = "select livre.numlivre, livre.titre, livre.auteur, livre.dateparution, livre.maisonedition, genre from livre inner join genre on genre.codegenre = livre.codegenre order by livre.NumLivre";
     Statement SelectStm = null;
     ResultSet Resultset = null;
     String User ="BoucherM";
@@ -38,113 +39,46 @@ public class RechercheLivre {
         {
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             final Connection conn = DriverManager.getConnection(url,User,Password);
-            CB_Genre.addItem("");
-            CB_Genre.addItem("Sciences");
-            CB_Genre.addItem("Informatique");
-            CB_Genre.addItem("Divertissement");
-            CB_Genre.addItem("Droit commercial");
-            CB_Genre.addItem("Histoire");
-            CB_Genre.addItem("LittÃ©rature");
-
             SelectStm =  conn.createStatement(Resultset.TYPE_SCROLL_INSENSITIVE, Resultset.CONCUR_READ_ONLY);
-            Resultset = SelectStm.executeQuery(sqlSel + " order by livre.NumLivre");
-            SuivantLivre();
+            Resultset = SelectStm.executeQuery(sqlSel);
+            SuivantLivre(conn);
 
             BTN_Next.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SuivantLivre();
+                SuivantLivre(conn);
             }
         });
 
             BTN_Previous.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-
-                    PrecedentLivre();
+                    PrecedentLivre(conn);
                 }
             });
 
             BTN_RechercheAuteur.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                RechercheAuteur();
+                RechercheAuteur(conn);
             }
         });
 
-            BTN_RechercheTitre.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    RechercheUnLivre();
-                }
-            });
-
-            CB_Genre.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    RechercheGenre();
-                }
-
-            });
 
         }catch(SQLException SqlConn)
         {
             System.out.println("Connexion Impossible");
         }
 
-
     }
 
-   private void RechercheGenre()
-   {
-       try
-       {
-           if(CB_Genre.getSelectedItem()!="")
-           {
-               TB_Auteur.setText("");
-               TB_Titre.setText("");
-               Resultset = SelectStm.executeQuery(sqlSel + " where Genre.Genre like '%" + CB_Genre.getSelectedItem().toString() + "%' order by livre.NumLivre");
-               SuivantLivre();
-           }
-       }
-       catch(SQLException ex)
-       {
-
-       }
-   }
-    private void RechercheUnLivre()
+    private void RechercheAuteur(Connection conn)
     {
-        try
-        {
-            Resultset = SelectStm.executeQuery(sqlSel + " where livre.Titre like '%" + TB_Titre.getText() + "%' order by livre.NumLivre");
-            CB_Genre.setSelectedItem("");
-            TB_Auteur.setText("");
-            SuivantLivre();
 
-        }catch(SQLException ex)
-        {
 
-        }
     }
 
-
-    private void RechercheAuteur()
-    {
-       try
-       {
-           Resultset = SelectStm.executeQuery(sqlSel + " where livre.Auteur like '%" + TB_Auteur.getText() + "%' order by livre.NumLivre");
-           CB_Genre.setSelectedItem("");
-           TB_Titre.setText("");
-           SuivantLivre();
-
-       }catch(SQLException ex)
-       {
-
-       }
-    }
-
-    private void PrecedentLivre()
+    private void PrecedentLivre(Connection conn)
     {
         try
         {
@@ -163,7 +97,7 @@ public class RechercheLivre {
 
         }
     }
-    private void SuivantLivre()
+    private void SuivantLivre(Connection conn)
     {
         try
         {
