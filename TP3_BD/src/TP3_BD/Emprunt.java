@@ -7,10 +7,10 @@ import java.awt.event.FocusEvent;
 import java.sql.*;
 
 /**
- * Created by Mélissa on 2015-04-18.
+ * Created by Mï¿½lissa on 2015-04-18.
  */
 public class Emprunt {
-    private JPanel rootPanel;
+    public JPanel RootEmprunt;
     private JList JL_LivreEmprunt;
     private JTextField TB_Adherant;
     private JTextField TB_NumLivre;
@@ -70,8 +70,9 @@ public class Emprunt {
     }
 
     public static void main(String[] args) {
+
         JFrame frame = new JFrame("Emprunt");
-        frame.setContentPane(new Emprunt().rootPanel);
+        frame.setContentPane(new Emprunt().RootEmprunt);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);

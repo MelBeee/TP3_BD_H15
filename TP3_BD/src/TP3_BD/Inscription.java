@@ -22,7 +22,7 @@ public class Inscription {
     private JButton modifierButton;
     private JButton precedentButton;
     private JButton suivantButton;
-    private JPanel RootInscription;
+    public JPanel RootInscription;
     private JButton effacerButton;
     int NumAdherentSelect =0;
     String sqlSel = "Select * from Adherent";

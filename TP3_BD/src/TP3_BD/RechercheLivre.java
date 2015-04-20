@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import oracle.jdbc.OracleDriver;
+
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.sql.*;
 
 /**
@@ -24,6 +27,9 @@ public class RechercheLivre {
     private JLabel LB_Edition;
     private JLabel LB_Genre;
     private JLabel LB_Numero;
+    private JRadioButton inscriptionRadioButton;
+    private JRadioButton empruntRadioButton;
+    private JScrollBar scrollBar1;
     String sqlSel = "select livre.numlivre, livre.titre, livre.auteur, livre.dateparution, livre.maisonedition, genre from livre inner join genre on genre.codegenre = livre.codegenre";
     Statement SelectStm = null;
     ResultSet Resultset = null;
@@ -92,11 +98,9 @@ public class RechercheLivre {
         {
             System.out.println("Connexion Impossible");
         }
-
-
     }
 
-   private void RechercheGenre()
+    private void RechercheGenre()
    {
        try
        {
@@ -127,8 +131,6 @@ public class RechercheLivre {
 
         }
     }
-
-
     private void RechercheAuteur()
     {
        try
@@ -189,5 +191,19 @@ public class RechercheLivre {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+
+
+        JFrame frame2 = new JFrame("Emprunt");
+        frame2.setContentPane(new Emprunt().RootEmprunt);
+        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame2.pack();
+        frame2.setVisible(true);
+
+
+        JFrame frame3 = new JFrame("Inscription");
+        frame3.setContentPane(new Inscription().RootInscription);
+        frame3.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame3.pack();
+        frame3.setVisible(true);
     }
 }
