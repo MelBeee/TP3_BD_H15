@@ -19,5 +19,8 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="TP3_BD" target="" />
+    </bytecodeTargetLevel>
   </component>
 </project>

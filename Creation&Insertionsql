@@ -42,12 +42,12 @@ create table Emprunt
   NumExemplaire number,
   NumAdherent number,
   DateEmprunt date,
-  DateRetour date
+  DateRetour date,
+  DeRetour char(1)
 );
-
 alter table Emprunt add constraint NumExemplaire_FK foreign key ( NumExemplaire ) references Exemplaire ( NumExemplaire );
 alter table Emprunt add constraint NumAdherent_FK foreign key ( NumAdherent ) references Adherent ( NumAdherent ); 
-alter table Emprunt add constraint Emprunt_PK primary key ( NumExemplaire, NumAdherent );
+alter table Emprunt add constraint Emprunt_PK primary key ( NumExemplaire, NumAdherent, DateEmprunt);
 
 insert into genre values('inf', 'Informatique');
 insert into genre values('sci','Sciences');
@@ -112,7 +112,13 @@ insert into exemplaire values ('32','17');
 insert into exemplaire values ('33','18');
 insert into exemplaire values ('34','18');
 
+insert into ADHERENT values (1, 'Laplante', 'Charlie', 'rue NorthTruc','5141231234');
+insert into ADHERENT values (2, 'Boucher',  'Mélissa', 'rue Orchidées','4501231234');
+insert into ADHERENT values (3, 'Paquette', 'Frederic','rue DesRues',  '4181231234');
+insert into ADHERENT values (4, 'Sylvestre', 'David',  'rue TaMere',   '4381231234');
+
 commit;
+
 
 
 

@@ -14,6 +14,13 @@ where g.GENRE = '';
 
 -- #3 Ajouter un pret
 
+select exemplaire.numexemplaire
+from exemplaire
+left join emprunt on emprunt.numexemplaire = exemplaire.numexemplaire
+where exemplaire.numexemplaire not in 
+(select numexemplaire from emprunt where deretour = '1') 
+and numlivre = 1;
+
 insert into emprunt values (0, 0, curdate(), curdate() + 30);
 
 -- #4 Consulter la liste des livres en cours de prêts 

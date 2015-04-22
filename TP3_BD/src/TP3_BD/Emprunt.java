@@ -85,24 +85,19 @@ public class Emprunt {
     {
         try
         {
-            Date now = new Date();
-            Date last = new Date(now.getYear(), now.getMonth()+1, now.getDay());
-            String SqlIns = "insert into emprunt values(" + CB_Exemplaire.getSelectedItem().toString() + ", " + numadherent + ", " + now.toString() + ", " + last.toString() + ")";
+            String SqlIns = "insert into emprunt values(" + CB_Exemplaire.getSelectedItem().toString() + "," + numadherent + ", '2015-01-02', '2015-01-02', 1)";
             Statement InsertStm = conn.createStatement();
             int n = InsertStm.executeUpdate(SqlIns);
-            conn.commit();
-
-            System.out.println("nb de lignes ajoute " + n);
-            Resultset = SelectStm.executeQuery(SqlIns);
-
-        }catch(SQLException sqlInsertEx)
+        }
+        catch(SQLException sqlInsertEx)
         {
-            System.out.println(sqlInsertEx.getSQLState());
+            System.out.println(sqlInsertEx.getMessage());
         }
     }
 
     private void VerifierLivre(Connection conn)
     {
+        CB_Exemplaire.removeAllItems();
         if(TB_Adherant.getText().isEmpty())
         {
             JOptionPane.showMessageDialog(RootEmprunt,
@@ -117,16 +112,18 @@ public class Emprunt {
         }
         else
         {
+            numadherent = TB_Adherant.getText();
+            numlivre = TB_NumLivre.getText();
             try
             {
                 boolean resultat = false;
-                SelectStm =  conn.createStatement(Resultset.TYPE_SCROLL_INSENSITIVE, Resultset.CONCUR_READ_ONLY);
-                Resultset = SelectStm.executeQuery(" SELECT EXEMPLAIRE.NUMEXEMPLAIRE " +
-                                                    " FROM EXEMPLAIRE " +
-                                                    " left JOIN emprunt on emprunt.NUMEXEMPLAIRE = exemplaire.NUMEXEMPLAIRE " +
-                                                    " where emprunt.NUMEXEMPLAIRE not in " +
-                                                    " (select NUMEXEMPLAIRE from emprunt where dateretour > '2015-04-21' ) " +
-                                                    " and numlivre = 3) ");
+                SelectStm =  conn.createStatement();
+                Resultset = SelectStm.executeQuery( " select exemplaire.numexemplaire " +
+                                                    " from exemplaire " +
+                                                    " left join emprunt on emprunt.numexemplaire = exemplaire.numexemplaire " +
+                                                    " where exemplaire.numexemplaire not in " +
+                                                    " (select numexemplaire from emprunt where deretour = '1') " +
+                                                    " and numlivre = " + numlivre );
 
                 while(Resultset.next())
                 {
@@ -143,7 +140,9 @@ public class Emprunt {
 
             }catch(SQLException sqlInsertEx)
             {
-                System.out.println(sqlInsertEx.getSQLState());
+                System.out.println("Erreur lors de la recherche d'un livre");
+                System.out.println(sqlInsertEx.getErrorCode());
+                System.out.println(sqlInsertEx.getMessage());
             }
         }
     }
