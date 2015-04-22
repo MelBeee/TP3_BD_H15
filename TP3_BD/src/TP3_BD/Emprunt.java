@@ -1,5 +1,7 @@
 package TP3_BD;
 
+import oracle.jdbc.OracleTypes;
+
 import javax.swing.*;
 import javax.swing.table.TableColumn;
 import javax.xml.transform.Result;
@@ -9,6 +11,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.sql.*;
 import java.util.Date;
+import java.util.concurrent.Callable;
 
 /**
  * Created by M�lissa on 2015-04-18.
@@ -21,8 +24,8 @@ public class Emprunt {
     private JComboBox CB_Exemplaire;
     private JButton BTN_Emprunter;
     private JButton BTN_Rechercher;
-    private JTable table1;
     private JPanel PN_TopLivre;
+    private JList JL_TopLivre;
     String sqlSel = " select l.titre, g.genre, e.dateemprunt, e.dateretour, ad.nom, ad.prenom " +
                     " from EMPRUNT e " +
                     " inner join adherent ad on ad.NUMADHERENT = e.NUMADHERENT " +
@@ -59,11 +62,38 @@ public class Emprunt {
                 compteur ++;
             }
             JL_LivreEmprunt.setModel(listmodel);
+            Resultset.close();
         }
         catch(SQLException sqlex)
         {
             System.out.println("Erreur dans affichage des emprunts");
             System.out.println(sqlex.getErrorCode());
+        }
+    }
+
+    public void TopLivre(Connection conn)
+    {
+        try
+        {
+            CallableStatement Callaff = conn.prepareCall("{ call GESTIONBIBLIOTHEQUE.TopLivre(?) }");
+            Callaff.registerOutParameter(1, OracleTypes.CURSOR);
+            Callaff.execute();
+            ResultSet rtoplivre = (ResultSet)Callaff.getObject(1);
+            DefaultListModel listmodel = new DefaultListModel();
+            int compteur = 1;
+
+            while(rtoplivre.next())
+            {
+                listmodel.addElement(compteur + " - " + rtoplivre.getInt(1) + " | " + rtoplivre.getString(2));
+                compteur ++;
+            }
+            Callaff.clearParameters();
+            Callaff.close();
+            rtoplivre.close();
+        }
+        catch(SQLException ewf)
+        {
+            System.out.println(ewf.getMessage());
         }
     }
 
@@ -75,6 +105,7 @@ public class Emprunt {
             final Connection conn = DriverManager.getConnection(url, User, Password);
 
             RemplirListEmprunt(conn);
+            TopLivre(conn);
             try
             {
                 SelectStm =  conn.createStatement(Resultset.TYPE_SCROLL_INSENSITIVE, Resultset.CONCUR_READ_ONLY);
@@ -136,6 +167,7 @@ public class Emprunt {
         }
         VerifierLivre(conn);
         RemplirListEmprunt(conn);
+        TopLivre(conn);
     }
 
     private void VerifierLivre(Connection conn)
