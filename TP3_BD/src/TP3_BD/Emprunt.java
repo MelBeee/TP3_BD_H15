@@ -121,12 +121,17 @@ public class Emprunt {
             {
                 boolean resultat = false;
                 SelectStm =  conn.createStatement(Resultset.TYPE_SCROLL_INSENSITIVE, Resultset.CONCUR_READ_ONLY);
-                Resultset = SelectStm.executeQuery("select numexemplaire from exemplaire inner join livre on livre.numlivre = exemplaire.numlivre where numlivre = " + numlivre);
+                Resultset = SelectStm.executeQuery(" SELECT EXEMPLAIRE.NUMEXEMPLAIRE " +
+                                                    " FROM EXEMPLAIRE " +
+                                                    " left JOIN emprunt on emprunt.NUMEXEMPLAIRE = exemplaire.NUMEXEMPLAIRE " +
+                                                    " where emprunt.NUMEXEMPLAIRE not in " +
+                                                    " (select NUMEXEMPLAIRE from emprunt where dateretour > '2015-04-21' ) " +
+                                                    " and numlivre = 3) ");
 
                 while(Resultset.next())
                 {
                     resultat = true;
-                    CB_Exemplaire.addItem(Resultset.getInt(0));
+                    CB_Exemplaire.addItem(Resultset.getInt(1));
                     BTN_Emprunter.setEnabled(true);
                 }
 
