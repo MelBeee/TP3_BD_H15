@@ -13,7 +13,8 @@
       <component id="6157f" class="javax.swing.JList" binding="JL_LivreEmprunt">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="5" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
+            <minimum-size width="150" height="-1"/>
+            <preferred-size width="150" height="100"/>
           </grid>
         </constraints>
         <properties>

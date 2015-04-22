@@ -189,7 +189,7 @@ public class Inscription {
     {
         try
         {
-            String SqlIns = "insert into adherent values('"+TB_Nom.getText()+"','"+TB_Prenom.getText()+"','"+TB_Adresse.getText()+"','"+TB_Telephone.getText()+"')";
+            String SqlIns = "insert into adherent(nom,prenom,adresse,telephone) values('"+TB_Nom.getText()+"','"+TB_Prenom.getText()+"','"+TB_Adresse.getText()+"','"+TB_Telephone.getText()+"')";
             Statement InsertStm = conn.createStatement();
             int n = InsertStm.executeUpdate(SqlIns);
             conn.commit();

@@ -2,6 +2,7 @@ package TP3_BD;
 
 import javax.swing.*;
 import javax.swing.table.TableColumn;
+import javax.xml.transform.Result;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -37,6 +38,34 @@ public class Emprunt {
     String numlivre = "";
     String numadherent = "";
 
+    public void RemplirListEmprunt(Connection conn)
+    {
+        try
+        {
+            String commandesql =    " select e.numexemplaire, l.titre, g.genre, e.dateemprunt, e.dateretour, ad.prenom, ad.nom " +
+                                    " from livre l " +
+                                    " inner join exemplaire ex on ex.numlivre = l.NUMLIVRE " +
+                                    " inner join emprunt e on e.numexemplaire = ex.NUMEXEMPLAIRE " +
+                                    " inner join adherent ad on ad.NUMADHERENT = e.NUMADHERENT " +
+                                    " inner join genre g on g.CODEGENRE = l.CODEGENRE ";
+            int compteur = 1;
+            SelectStm = conn.createStatement();
+            Resultset = SelectStm.executeQuery(commandesql);
+            DefaultListModel listmodel = new DefaultListModel();
+
+            while(Resultset.next())
+            {
+                listmodel.addElement(compteur + ": " + Resultset.getInt(1) + "/" + Resultset.getString(2) + "/" + Resultset.getString(3) + "/" + Resultset.getDate(4).toString() + "/" + Resultset.getDate(5).toString() + "/" + Resultset.getString(6) + " " + Resultset.getString(7));
+                compteur ++;
+            }
+            JL_LivreEmprunt.setModel(listmodel);
+        }
+        catch(SQLException sqlex)
+        {
+            System.out.println("Erreur dans affichage des emprunts");
+            System.out.println(sqlex.getErrorCode());
+        }
+    }
 
     public Emprunt()
     {
@@ -45,6 +74,7 @@ public class Emprunt {
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             final Connection conn = DriverManager.getConnection(url, User, Password);
 
+            RemplirListEmprunt(conn);
             try
             {
                 SelectStm =  conn.createStatement(Resultset.TYPE_SCROLL_INSENSITIVE, Resultset.CONCUR_READ_ONLY);
@@ -52,7 +82,7 @@ public class Emprunt {
 
                 while(Resultset.next())
                 {
-                    // add au tableau des livres empruntés
+                    // add au tableau des livres empruntï¿½s
                 }
             }
             catch(SQLException ioe)
@@ -64,7 +94,16 @@ public class Emprunt {
             BTN_Emprunter.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    EmprunterUnLivre(conn);
+                    if(CB_Exemplaire.getSelectedItem().toString() != "")
+                    {
+                        EmprunterUnLivre(conn);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(RootEmprunt,
+                                "Veuillez selectionner un exemplaire", "Attention !",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
                 }
             });
 
@@ -85,14 +124,18 @@ public class Emprunt {
     {
         try
         {
-            String SqlIns = "insert into emprunt values(" + CB_Exemplaire.getSelectedItem().toString() + "," + numadherent + ", '2015-01-02', '2015-01-02', 1)";
+            String SqlIns = "insert into emprunt values(" + CB_Exemplaire.getSelectedItem().toString() + "," + numadherent + ", sysdate, sysdate+30, 1)";
             Statement InsertStm = conn.createStatement();
             int n = InsertStm.executeUpdate(SqlIns);
         }
         catch(SQLException sqlInsertEx)
         {
-            System.out.println(sqlInsertEx.getMessage());
+            JOptionPane.showMessageDialog(RootEmprunt,
+                    "Numero d'adherent innexistant", "Attention !",
+                    JOptionPane.WARNING_MESSAGE);
         }
+        VerifierLivre(conn);
+        RemplirListEmprunt(conn);
     }
 
     private void VerifierLivre(Connection conn)
