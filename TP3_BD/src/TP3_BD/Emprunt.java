@@ -81,12 +81,13 @@ public class Emprunt {
             ResultSet rtoplivre = (ResultSet)Callaff.getObject(1);
             DefaultListModel listmodel = new DefaultListModel();
             int compteur = 1;
-
             while(rtoplivre.next())
             {
                 listmodel.addElement(compteur + " - " + rtoplivre.getInt(1) + " | " + rtoplivre.getString(2));
                 compteur ++;
+                System.out.println("blablabqalba");
             }
+            JL_TopLivre.setModel(listmodel);
             Callaff.clearParameters();
             Callaff.close();
             rtoplivre.close();

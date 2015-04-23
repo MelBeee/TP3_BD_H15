@@ -167,19 +167,26 @@ public class Inscription {
 
     private void ModifierPersonne(Connection conn)
    {
-       try
-       {
-           String SqlUpd = "Update Adherent set Nom ='"+TB_Nom.getText()+"', Prenom = '"+TB_Prenom.getText()+"', Adresse ='"+TB_Adresse.getText()+"', Telephone ='"+TB_Telephone.getText()+"' where NumAdherent ="+NumAdherentSelect;
-           Statement UpdateStm = conn.createStatement();
-           int n = UpdateStm.executeUpdate(SqlUpd);
-           conn.commit();
-           EffacerPersonne();
-           System.out.println("nb de lignes modifier " + n);
-           Resultset = SelectStm.executeQuery(sqlSel);
-           SuivantPersonne(conn);
-       }catch(SQLException sqlUpdateEx){
-           System.out.println(sqlUpdateEx.getSQLState());
+       if(!TB_Adresse.getText().isEmpty() && !TB_Nom.getText().isEmpty() && !TB_Prenom.getText().isEmpty() && !TB_Telephone.getText().isEmpty()) {
+           try {
+               String SqlUpd = "Update Adherent set Nom ='" + TB_Nom.getText() + "', Prenom = '" + TB_Prenom.getText() + "', Adresse ='" + TB_Adresse.getText() + "', Telephone ='" + TB_Telephone.getText() + "' where NumAdherent =" + NumAdherentSelect;
+               Statement UpdateStm = conn.createStatement();
+               int n = UpdateStm.executeUpdate(SqlUpd);
+               conn.commit();
+               EffacerPersonne();
+               System.out.println("nb de lignes modifier " + n);
+               Resultset = SelectStm.executeQuery(sqlSel);
+               SuivantPersonne(conn);
+           } catch (SQLException sqlUpdateEx) {
+               System.out.println(sqlUpdateEx.getSQLState());
 
+           }
+       }
+       else
+       {
+           JOptionPane.showMessageDialog(RootInscription,
+                   "Information obligatoire", "Attention !",
+                   JOptionPane.WARNING_MESSAGE);
        }
    }
 
@@ -187,19 +194,25 @@ public class Inscription {
 
     private void AjouterPersonne(Connection conn)
     {
-        try
+        if(!TB_Adresse.getText().isEmpty() && !TB_Nom.getText().isEmpty() && !TB_Prenom.getText().isEmpty() && !TB_Telephone.getText().isEmpty()) {
+            try {
+                String SqlIns = "insert into adherent(nom,prenom,adresse,telephone) values('" + TB_Nom.getText() + "','" + TB_Prenom.getText() + "','" + TB_Adresse.getText() + "','" + TB_Telephone.getText() + "')";
+                Statement InsertStm = conn.createStatement();
+                int n = InsertStm.executeUpdate(SqlIns);
+                conn.commit();
+                EffacerPersonne();
+                System.out.println("nb de lignes ajoute " + n);
+                Resultset = SelectStm.executeQuery(sqlSel);
+                SuivantPersonne(conn);
+            } catch (SQLException sqlInsertEx) {
+                System.out.println(sqlInsertEx.getSQLState());
+            }
+        }
+        else
         {
-            String SqlIns = "insert into adherent(nom,prenom,adresse,telephone) values('"+TB_Nom.getText()+"','"+TB_Prenom.getText()+"','"+TB_Adresse.getText()+"','"+TB_Telephone.getText()+"')";
-            Statement InsertStm = conn.createStatement();
-            int n = InsertStm.executeUpdate(SqlIns);
-            conn.commit();
-            EffacerPersonne();
-            System.out.println("nb de lignes ajoute " + n);
-            Resultset = SelectStm.executeQuery(sqlSel);
-            SuivantPersonne(conn);
-        }catch(SQLException sqlInsertEx)
-        {
-            System.out.println(sqlInsertEx.getSQLState());
+            JOptionPane.showMessageDialog(RootInscription,
+                    "Information obligatoire", "Attention !",
+                    JOptionPane.WARNING_MESSAGE);
         }
     }
 
