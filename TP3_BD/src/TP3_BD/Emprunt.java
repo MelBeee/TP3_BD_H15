@@ -26,6 +26,8 @@ public class Emprunt {
     private JButton BTN_Rechercher;
     private JPanel PN_TopLivre;
     private JList JL_TopLivre;
+    private JScrollPane JS_Scroll;
+    private JScrollPane JS_ScrollTopLivre;
     String sqlSel = " select l.titre, g.genre, e.dateemprunt, e.dateretour, ad.nom, ad.prenom " +
                     " from EMPRUNT e " +
                     " inner join adherent ad on ad.NUMADHERENT = e.NUMADHERENT " +
@@ -62,6 +64,7 @@ public class Emprunt {
                 compteur ++;
             }
             JL_LivreEmprunt.setModel(listmodel);
+            JS_Scroll.setViewportView(JL_LivreEmprunt);
             Resultset.close();
         }
         catch(SQLException sqlex)
@@ -87,6 +90,7 @@ public class Emprunt {
                 compteur ++;
             }
             JL_TopLivre.setModel(listmodel);
+            JS_ScrollTopLivre.setViewportView(JL_TopLivre);
             Callaff.clearParameters();
             Callaff.close();
             rtoplivre.close();
@@ -101,20 +105,6 @@ public class Emprunt {
     {
             RemplirListEmprunt(conn);
             TopLivre(conn);
-            try
-            {
-                SelectStm =  conn.createStatement(Resultset.TYPE_SCROLL_INSENSITIVE, Resultset.CONCUR_READ_ONLY);
-                Resultset = SelectStm.executeQuery(sqlSel);
-
-                while(Resultset.next())
-                {
-                    // add au tableau des livres emprunt�s
-                }
-            }
-            catch(SQLException ioe)
-            {
-
-            }
 
             BTN_Emprunter.addActionListener(new ActionListener() {
                 @Override
@@ -131,7 +121,6 @@ public class Emprunt {
                     }
                 }
             });
-
             BTN_Rechercher.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
