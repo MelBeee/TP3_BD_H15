@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.*;
 
 import com.sun.deploy.panel.DeleteFilesDialog;
@@ -24,19 +25,15 @@ public class Inscription {
     private JButton suivantButton;
     public JPanel RootInscription;
     private JButton effacerButton;
+    private JButton BTN_Quitter;
     int NumAdherentSelect =0;
     String sqlSel = "Select * from Adherent";
     Statement SelectStm = null;
     ResultSet Resultset = null;
-    String User ="BoucherM";
-    String Password ="ORACLE2";
-    String url = "jdbc:oracle:thin:@205.237.244.251:1521:orcl";
 
-    public Inscription() {
+    public Inscription(final Connection conn) {
         try
         {
-            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-            final Connection conn = DriverManager.getConnection(url,User,Password);
             SelectStm =  conn.createStatement(Resultset.TYPE_SCROLL_INSENSITIVE, Resultset.CONCUR_READ_ONLY);
             Resultset = SelectStm.executeQuery(sqlSel);
             SuivantPersonne(conn);
@@ -62,7 +59,6 @@ public class Inscription {
                     ModifierPersonne(conn);
                 }
             });
-
             supprimerButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -75,16 +71,31 @@ public class Inscription {
                     SuivantPersonne(conn);
                 }
             });
-
             precedentButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     PrecedentPersonne(conn);
                 }
             });
+            BTN_Quitter.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try
+                    {
+                        conn.close();
+                        System.exit(1);
+                    }
+                    catch(SQLException connEX)
+                    {
+
+                    }
+                }
+            });
+
         }catch(SQLException connEX)
         {
             System.out.println("Connexion Impossible");
+
         }
 
         effacerButton.addActionListener(new ActionListener() {
@@ -99,8 +110,9 @@ public class Inscription {
                 effacerButton.setEnabled(false);
             }
         });
-    }
 
+
+    }
 
     private void EffacerPersonne()
     {
@@ -109,6 +121,7 @@ public class Inscription {
         TB_Prenom.setText("");
         TB_Telephone.setText("");
     }
+
     private void SuivantPersonne(Connection conn)
     {
         try
@@ -123,9 +136,7 @@ public class Inscription {
            }
         }catch(SQLException sqlSuivantEx){
             System.out.println(sqlSuivantEx.getSQLState());
-
         }
-
     }
 
     private void PrecedentPersonne(Connection conn)
@@ -142,9 +153,9 @@ public class Inscription {
             }
         }catch(SQLException sqlSuivantEx){
             System.out.println(sqlSuivantEx.getSQLState());
-
         }
     }
+
    private void SupprimerPersonne(Connection conn)
    {
        try {
@@ -157,13 +168,11 @@ public class Inscription {
        Resultset = SelectStm.executeQuery(sqlSel);
        SuivantPersonne(conn);
        }catch(SQLException sqlUpdateEx){
-           System.out.println(sqlUpdateEx.getSQLState());
-
+           JOptionPane.showMessageDialog(RootInscription,
+                   "Impossible de supprimer un usager qui a emprunter des livres", "Attention !",
+                   JOptionPane.WARNING_MESSAGE);
        }
-
    }
-
-
 
     private void ModifierPersonne(Connection conn)
    {
@@ -179,7 +188,6 @@ public class Inscription {
                SuivantPersonne(conn);
            } catch (SQLException sqlUpdateEx) {
                System.out.println(sqlUpdateEx.getSQLState());
-
            }
        }
        else
@@ -189,8 +197,6 @@ public class Inscription {
                    JOptionPane.WARNING_MESSAGE);
        }
    }
-
-
 
     private void AjouterPersonne(Connection conn)
     {
@@ -215,7 +221,6 @@ public class Inscription {
                     JOptionPane.WARNING_MESSAGE);
         }
     }
-
 
     public JButton getSupprimerButton() {
         return supprimerButton;
@@ -289,13 +294,38 @@ public class Inscription {
         this.suivantButton = suivantButton;
     }
 
-
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Inscription");
-        frame.setContentPane(new Inscription().RootInscription);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+        try
+        {
+            String User ="BoucherM";
+            String Password ="ORACLE2";
+            String url = "jdbc:oracle:thin:@205.237.244.251:1521:orcl";
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+            final Connection conn = DriverManager.getConnection(url,User,Password);
 
+            JFrame frame = new JFrame("RechercheLivre");
+            frame.setContentPane(new RechercheLivre(conn).rootPanel);
+            // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setVisible(true);
+
+
+            JFrame frame2 = new JFrame("Emprunt");
+            frame2.setContentPane(new Emprunt(conn).RootEmprunt);
+            // frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame2.pack();
+            frame2.setVisible(true);
+
+
+            JFrame frame3 = new JFrame("Inscription");
+            frame3.setContentPane(new Inscription(conn).RootInscription);
+            // frame3.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame3.pack();
+            frame3.setVisible(true);
+        }
+        catch(SQLException ex)
+        {
+
+        }
     }
 }

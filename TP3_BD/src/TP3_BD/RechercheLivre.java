@@ -20,7 +20,7 @@ public class RechercheLivre {
     private JButton BTN_RechercheTitre;
     private JButton BTN_Previous;
     private JButton BTN_Next;
-    private JPanel rootPanel;
+    public JPanel rootPanel;
     private JLabel LB_Titre;
     private JLabel LB_Auteur;
     private JLabel LB_Date;
@@ -38,12 +38,10 @@ public class RechercheLivre {
     String url = "jdbc:oracle:thin:@205.237.244.251:1521:orcl";
     int NumlivretSelect = 0;
 
-    public RechercheLivre()
+    public RechercheLivre(final Connection conn)
     {
         try
         {
-            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-            final Connection conn = DriverManager.getConnection(url,User,Password);
             CB_Genre.addItem("");
             CB_Genre.addItem("Sciences");
             CB_Genre.addItem("Informatique");
@@ -96,7 +94,7 @@ public class RechercheLivre {
 
         }catch(SQLException SqlConn)
         {
-            System.out.println("Connexion Impossible");
+            System.out.println(SqlConn.getMessage());
         }
     }
 
@@ -186,24 +184,6 @@ public class RechercheLivre {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("RechercheLivre");
-        frame.setContentPane(new RechercheLivre().rootPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
 
-
-        JFrame frame2 = new JFrame("Emprunt");
-        frame2.setContentPane(new Emprunt().RootEmprunt);
-        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame2.pack();
-        frame2.setVisible(true);
-
-
-        JFrame frame3 = new JFrame("Inscription");
-        frame3.setContentPane(new Inscription().RootInscription);
-        frame3.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame3.pack();
-        frame3.setVisible(true);
     }
 }

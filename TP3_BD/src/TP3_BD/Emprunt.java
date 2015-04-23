@@ -85,7 +85,6 @@ public class Emprunt {
             {
                 listmodel.addElement(compteur + " - " + rtoplivre.getInt(1) + " | " + rtoplivre.getString(2));
                 compteur ++;
-                System.out.println("blablabqalba");
             }
             JL_TopLivre.setModel(listmodel);
             Callaff.clearParameters();
@@ -98,13 +97,8 @@ public class Emprunt {
         }
     }
 
-    public Emprunt()
+    public Emprunt(final Connection conn)
     {
-        try
-        {
-            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-            final Connection conn = DriverManager.getConnection(url, User, Password);
-
             RemplirListEmprunt(conn);
             TopLivre(conn);
             try
@@ -121,7 +115,6 @@ public class Emprunt {
             {
 
             }
-
 
             BTN_Emprunter.addActionListener(new ActionListener() {
                 @Override
@@ -145,11 +138,6 @@ public class Emprunt {
                     VerifierLivre(conn);
                 }
             });
-
-        }catch(SQLException connEX)
-        {
-            System.out.println("Connexion Impossible");
-        }
     }
 
     private void EmprunterUnLivre(Connection conn)
@@ -225,10 +213,5 @@ public class Emprunt {
 
     public static void main(String[] args) {
 
-        JFrame frame = new JFrame("Emprunt");
-        frame.setContentPane(new Emprunt().RootEmprunt);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
     }
 }
